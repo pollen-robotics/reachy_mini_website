@@ -13,7 +13,12 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      # lfs: true so the real media binaries (mp4/gif/png) are pulled,
+      # not just LFS pointer files. Vite copies them into dist/, and the
+      # push to the Space re-uploads them through git-lfs.
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-node@v4
         with:
