@@ -4,7 +4,6 @@ emoji: 🤖
 colorFrom: blue
 colorTo: purple
 sdk: static
-app_file: index.html
 hf_oauth: true
 pinned: true
 short_description: All about Reachy Mini, from building to getting started
