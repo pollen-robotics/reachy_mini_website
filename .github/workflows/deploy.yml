@@ -1,21 +1,29 @@
-name: Deploy to HF Space
+name: Deploy
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+# Pages deployment needs id-token (OIDC) + pages write. contents:read is
+# enough for checkout. The HF Space push authenticates via HF_TOKEN secret.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
-  group: deploy-hf-space
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  # Single build shared by both deploy targets (HF Space + GitHub Pages),
+  # so the LFS media is pulled and Vite runs only once.
+  build:
     runs-on: ubuntu-latest
     steps:
       # lfs: true so the real media binaries (mp4/gif/png) are pulled,
-      # not just LFS pointer files. Vite copies them into dist/, and the
-      # push to the Space re-uploads them through git-lfs.
+      # not just LFS pointer files. Vite copies them into dist/.
       - uses: actions/checkout@v4
         with:
           lfs: true
@@ -33,6 +41,7 @@ jobs:
       - name: Lint (non-blocking)
         run: npm run lint
         continue-on-error: true
+
       - name: Build
         env:
           # Absolute base URL of the API Space. Set as a GitHub
@@ -41,14 +50,47 @@ jobs:
           VITE_API_BASE: ${{ vars.VITE_API_BASE }}
         run: npm run build
 
-      # Assemble the Space payload: built assets + Space README
-      # (frontmatter) + a 404.html SPA fallback + the LFS attributes
-      # so large media (mp4/gif/png) commit through git-lfs.
+      # Assemble the deploy payload shared by both targets:
+      # - README (HF Space frontmatter, ignored by Pages)
+      # - .gitattributes so large media commit through git-lfs on the Space
+      # - 404.html SPA fallback (used by both HF static hosting and Pages)
+      # - CNAME for the GitHub Pages custom domain, only when the
+      #   PAGES_CNAME repo variable is set (Settings -> Variables).
       - name: Assemble deploy payload
+        env:
+          PAGES_CNAME: ${{ vars.PAGES_CNAME }}
         run: |
           cp README.md dist/README.md
           cp .gitattributes dist/.gitattributes
           cp dist/index.html dist/404.html
+          if [ -n "$PAGES_CNAME" ]; then
+            echo "$PAGES_CNAME" > dist/CNAME
+          fi
+
+      # Artifact for the HF Space job. include-hidden-files keeps
+      # .gitattributes (excluded by default since upload-artifact v4).
+      - name: Upload site artifact (HF Space)
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+          include-hidden-files: true
+
+      # Dedicated Pages artifact consumed by deploy-pages below.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy-hf-space:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
 
       - name: Push to Hugging Face Space
         env:
@@ -64,3 +106,14 @@ jobs:
           # Token auth: the username part of the URL is ignored by HF,
           # only HF_TOKEN authenticates. Space target is fixed.
           git push --force "https://pollen-robotics:${HF_TOKEN}@huggingface.co/spaces/pollen-robotics/reachy-mini-website.git" main
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
