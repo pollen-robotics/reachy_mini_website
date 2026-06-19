@@ -3,6 +3,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { openCookiePreferences } from '../utils/consent';
 
 const socialLinks = [
   { icon: GitHubIcon, href: 'https://github.com/pollen-robotics', label: 'GitHub' },
@@ -166,6 +167,24 @@ export default function Footer() {
                 }}
               >
                 Terms
+              </Link>
+              <Link
+                component="button"
+                type="button"
+                onClick={openCookiePreferences}
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.4)',
+                  textDecoration: 'none',
+                  fontSize: 12,
+                  fontFamily: 'inherit',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  p: 0,
+                  '&:hover': { color: 'rgba(255, 255, 255, 0.7)' },
+                }}
+              >
+                Cookie settings
               </Link>
             </Stack>
           </Stack>

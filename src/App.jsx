@@ -5,6 +5,7 @@ import theme from './theme/theme';
 import { AppsProvider } from './context/AppsContext';
 import { AuthProvider } from './context/AuthContext';
 
+import CookieConsent from './components/CookieConsent';
 import Home from './pages/Home';
 import Download from './pages/Download';
 import FAQ from './pages/FAQ';
@@ -105,6 +106,7 @@ export default function App() {
               {/* Catch-all: redirect unknown routes to home */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <CookieConsent />
           </BrowserRouter>
         </AppsProvider>
       </AuthProvider>
