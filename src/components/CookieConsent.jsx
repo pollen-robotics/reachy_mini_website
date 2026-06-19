@@ -108,6 +108,8 @@ export default function CookieConsent() {
                   height: 56,
                   flexShrink: 0,
                   mt: 0.25,
+                  borderRadius: 2,
+                  objectFit: 'cover',
                 }}
               />
               <Box>
