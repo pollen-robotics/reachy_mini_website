@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 # Pages deployment needs id-token (OIDC) + pages write. contents:read is
-# enough for checkout. The HF Space push authenticates via HF_TOKEN secret.
+# enough for checkout.
 permissions:
   contents: read
   pages: write
@@ -17,8 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single build shared by both deploy targets (HF Space + GitHub Pages),
-  # so the LFS media is pulled and Vite runs only once.
+  # Build once (pulling LFS media) and deploy to GitHub Pages.
   build:
     runs-on: ubuntu-latest
     steps:
@@ -50,62 +49,24 @@ jobs:
           VITE_API_BASE: ${{ vars.VITE_API_BASE }}
         run: npm run build
 
-      # Assemble the deploy payload shared by both targets:
-      # - README (HF Space frontmatter, ignored by Pages)
-      # - .gitattributes so large media commit through git-lfs on the Space
-      # - 404.html SPA fallback (used by both HF static hosting and Pages)
+      # Assemble the deploy payload for GitHub Pages:
+      # - 404.html SPA fallback (GitHub Pages serves it on unknown routes)
       # - CNAME for the GitHub Pages custom domain, only when the
       #   PAGES_CNAME repo variable is set (Settings -> Variables).
       - name: Assemble deploy payload
         env:
           PAGES_CNAME: ${{ vars.PAGES_CNAME }}
         run: |
-          cp README.md dist/README.md
-          cp .gitattributes dist/.gitattributes
           cp dist/index.html dist/404.html
           if [ -n "$PAGES_CNAME" ]; then
             echo "$PAGES_CNAME" > dist/CNAME
           fi
 
-      # Artifact for the HF Space job. include-hidden-files keeps
-      # .gitattributes (excluded by default since upload-artifact v4).
-      - name: Upload site artifact (HF Space)
-        uses: actions/upload-artifact@v4
-        with:
-          name: site-dist
-          path: dist
-          include-hidden-files: true
-
-      # Dedicated Pages artifact consumed by deploy-pages below.
+      # Pages artifact consumed by deploy-pages below.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-
-  deploy-hf-space:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: site-dist
-          path: dist
-
-      - name: Push to Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          cd dist
-          git init -b main
-          git lfs install --local
-          git config user.email "ci@github-actions"
-          git config user.name "github-actions"
-          git add -A
-          git commit -m "Deploy ${GITHUB_SHA::7}"
-          # Token auth: the username part of the URL is ignored by HF,
-          # only HF_TOKEN authenticates. Space target is fixed.
-          git push --force "https://pollen-robotics:${HF_TOKEN}@huggingface.co/spaces/pollen-robotics/reachy-mini-website.git" main
 
   deploy-pages:
     needs: build
