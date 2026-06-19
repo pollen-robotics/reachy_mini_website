@@ -285,23 +285,8 @@ function HeroDesktop() {
   );
 }
 
-// Hero Section - Mobile (2-zone layout: media on top + content on bottom)
+// Hero Section - Mobile (full-bleed video background with overlaid content)
 function HeroMobile() {
-  const [floatOffset, setFloatOffset] = useState(0);
-
-  useEffect(() => {
-    let startTime = Date.now();
-    let animationFrame;
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const offset = Math.sin((elapsed / 4000) * Math.PI * 2) * 6;
-      setFloatOffset(offset);
-      animationFrame = requestAnimationFrame(animate);
-    };
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
-
   return (
     <Box
       sx={{
@@ -325,78 +310,55 @@ function HeroMobile() {
         },
       }}
     >
-      {/* Media zone - top ~52% */}
+      {/* Full-bleed video background spanning the whole hero */}
       <Box
+        component="video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/assets/idle-reachy.gif"
         sx={{
-          position: "relative",
-          flex: "0 0 52svh",
-          overflow: "hidden",
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "50% 30%",
+          zIndex: 0,
         }}
       >
-        <Box
-          component="video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/assets/idle-reachy.gif"
-          sx={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "50% 35%",
-          }}
-        >
-          <source
-            src="/assets/Reachy-mini-wake-up-companion.mp4"
-            type="video/mp4"
-          />
-        </Box>
-
-        {/* Vignette: dark top + soft fade into the content zone below */}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            background: `
-              linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 25%, transparent 55%, rgba(0,0,0,0.95) 100%)
-            `,
-          }}
-        />
-
-        {/* Floating sticker that overflows from the media into the content zone */}
-        <Box
-          component="img"
-          src="/assets/reachies/astronaut.png"
-          alt=""
-          sx={{
-            position: "absolute",
-            bottom: -80,
-            right: -10,
-            width: 210,
-            height: "auto",
-            pointerEvents: "none",
-            transform: `translateY(${floatOffset}px) rotate(8deg)`,
-            filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.6))",
-            zIndex: 4,
-          }}
+        <source
+          src="/assets/Reachy-mini-wake-up-companion.mp4"
+          type="video/mp4"
         />
       </Box>
 
-      {/* Content zone - bottom ~48% */}
+      {/* Overlay: subtle dark top + strong fade at the bottom so the
+          text overlaid on the video stays readable */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background: `
+            linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.92) 92%, #000 100%)
+          `,
+        }}
+      />
+
+      {/* Content overlaid on the video, anchored to the bottom */}
       <Box
         sx={{
           flex: 1,
           position: "relative",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           px: 3,
-          pt: 3,
+          pt: 12,
           pb: 7,
-          zIndex: 2,
+          zIndex: 3,
         }}
       >
         <Box>
