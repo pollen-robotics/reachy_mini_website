@@ -593,7 +593,7 @@ export default function FAQ() {
                   Need more help?
                 </Typography>
                 <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>
-                  Join our Discord to chat with 500+ makers and the Pollen team.
+                  Join our Discord to chat with +9.000 makers and the Pollen team.
                 </Typography>
               </Box>
             </Stack>

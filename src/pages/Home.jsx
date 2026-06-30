@@ -704,7 +704,7 @@ function StatsSection() {
               <Typography
                 sx={{ color: "rgba(255,255,255,0.5)", fontSize: 14, mt: 0.5 }}
               >
-                We are already 4500+ Makers →
+                We are already +9.000 Makers →
               </Typography>
             </Box>
           </Box>
@@ -885,7 +885,7 @@ function ProductsSection() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              $449
+              $499
             </Typography>
 
             <Stack
@@ -911,7 +911,7 @@ function ProductsSection() {
               variant="contained"
               size="large"
               fullWidth
-              href="https://buy.stripe.com/9B65kFfFlaKFbY34W873G03"
+              href="https://store.pollen-robotics.com/products/reachy-mini-wireless-version"
               target="_blank"
               sx={{ py: 1.5 }}
             >
@@ -946,7 +946,7 @@ function ProductsSection() {
                 color: "text.primary",
               }}
             >
-              $299
+              $399
             </Typography>
 
             <Stack
@@ -972,7 +972,7 @@ function ProductsSection() {
               variant="outlined"
               size="large"
               fullWidth
-              href="https://buy.stripe.com/6oUfZj78P1a5e6b0FS73G02"
+              href="https://store.pollen-robotics.com/products/reachy-mini-lite-version"
               target="_blank"
               sx={{ py: 1.5 }}
             >
@@ -1003,9 +1003,9 @@ function ProductsSection() {
             lineHeight: 1.7,
           }}
         >
-          <strong>Import duties:</strong> EU/UK + US/Canada ship duty-paid (DDP).
+          <strong>Shipping and import duties:</strong> all orders ship DAP (Delivered At Place).
           <br />
-          Other destinations may incur local import duties/taxes on delivery (DAP).
+          Shipping costs and any local import duties, taxes, or customs fees are the responsibility of the buyer and are not included in the product price.
         </Typography>
       </Box>
 
@@ -1356,7 +1356,7 @@ function CommunitySection() {
       >
         <Box sx={{ position: "relative", zIndex: 1 }}>
           <Typography variant="h2" sx={{ mb: 2 }}>
-            Join 4500+ makers
+            Join +9.000 makers
           </Typography>
           <Typography
             sx={{
