@@ -38,22 +38,22 @@ const products = {
   wireless: {
     name: 'Reachy Mini',
     tagline: 'The complete experience',
-    price: 449,
+    price: 499,
     badge: 'Wireless',
     badgeColor: '#0ea5e9',
     description: 'Self-contained robot with on-board compute. Works wirelessly or wired, perfect for standalone projects and demos. <strong>Ships in 60 days</strong>.',
-    buyLink: 'https://buy.stripe.com/9B65kFfFlaKFbY34W873G03',
+    buyLink: 'https://store.pollen-robotics.com/products/reachy-mini-wireless-version',
     image: '/assets/reachy-wireless.png',
     featured: true,
   },
   lite: {
     name: 'Reachy Mini Lite',
     tagline: 'Perfect to get started',
-    price: 299,
+    price: 399,
     badge: 'Lite',
     badgeColor: '#f59e0b',
     description: 'Connect to your computer via USB. Same expressive robot, powered by your machine. Ideal for development and learning. <strong>Ships in 30 days</strong>.',
-    buyLink: 'https://buy.stripe.com/6oUfZj78P1a5e6b0FS73G02',
+    buyLink: 'https://store.pollen-robotics.com/products/reachy-mini-lite-version',
     image: '/assets/reachy-lite.png',
     featured: false,
   },
@@ -98,7 +98,7 @@ const faqItems = [
   },
   {
     question: 'What about customs and import taxes?',
-    answer: 'EU/UK and US/Canada orders ship duty-paid (DDP) — no surprise fees on delivery. Other destinations ship DAP, meaning local import duties and taxes may apply upon delivery.',
+    answer: 'All orders ship DAP (Delivered At Place). Shipping costs and any local import duties, taxes, or customs fees are the responsibility of the buyer and are not included in the product price.',
   },
   {
     question: 'Can I upgrade from Lite to Wireless later?',
@@ -386,9 +386,9 @@ function ProductCardsSection() {
           color="text.secondary"
           sx={{ maxWidth: 600, mx: 'auto', lineHeight: 1.7, mt: 1 }}
         >
-          <strong>Import duties:</strong> EU/UK + US/Canada ship duty-paid (DDP).
+          <strong>Shipping and import duties:</strong> all orders ship DAP (Delivered At Place).
           <br />
-          Other destinations may incur local import duties/taxes on delivery (DAP).
+          Shipping costs and any local import duties, taxes, or customs fees are the responsibility of the buyer and are not included in the product price.
         </Typography>
       </Box>
     </Container>
@@ -445,13 +445,13 @@ function ComparisonSection() {
                   <TableCell align="center" sx={{ fontWeight: 700, fontSize: 15, py: 2.5 }}>
                     <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
                       <Chip label="Wireless" size="small" sx={{ bgcolor: '#0ea5e920', color: '#0ea5e9', fontWeight: 600 }} />
-                      <Typography fontWeight={700}>$449</Typography>
+                      <Typography fontWeight={700}>$499</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell align="center" sx={{ fontWeight: 700, fontSize: 15, py: 2.5 }}>
                     <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
                       <Chip label="Lite" size="small" sx={{ bgcolor: '#f59e0b20', color: '#f59e0b', fontWeight: 600 }} />
-                      <Typography fontWeight={700}>$299</Typography>
+                      <Typography fontWeight={700}>$399</Typography>
                     </Stack>
                   </TableCell>
                 </TableRow>
@@ -642,7 +642,7 @@ function FinalCTASection() {
               '&:hover': { bgcolor: '#e68600' },
             }}
           >
-            Buy Wireless — $449
+            Buy Wireless — $499
           </Button>
           <Button
             variant="outlined"
@@ -660,7 +660,7 @@ function FinalCTASection() {
               },
             }}
           >
-            Buy Lite — $299
+            Buy Lite — $399
           </Button>
         </Stack>
       </Container>
