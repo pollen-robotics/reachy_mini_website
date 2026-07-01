@@ -26,7 +26,7 @@ import {
   OPEN_PREFERENCES_EVENT,
 } from '../utils/consent';
 
-const PRIVACY_URL = 'https://www.pollen-robotics.com/privacy-policy/';
+const PRIVACY_URL = 'https://store.pollen-robotics.com/policies/privacy-policy';
 
 export default function CookieConsent() {
   // Banner is shown only when the user has not made a valid choice yet.
