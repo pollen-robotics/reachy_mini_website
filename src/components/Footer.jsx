@@ -143,7 +143,7 @@ export default function Footer() {
                 License
               </Link>
               <Link
-                href="https://www.pollen-robotics.com/privacy-policy/"
+                href="https://store.pollen-robotics.com/policies/privacy-policy"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
